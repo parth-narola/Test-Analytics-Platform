@@ -3,7 +3,7 @@ const { initDatabase, closeDatabase } = require('./db/database');
 
 // Configuration from environment variables
 const PORT = process.env.PORT || 3000;
-const DATABASE_PATH = process.env.DATABASE_PATH || './test-analytics.db';
+const DATABASE_PATH = process.env.DATABASE_PATH || './data/test-analytics.db';
 
 let server = null;
 
