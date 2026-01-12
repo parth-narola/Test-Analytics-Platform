@@ -1,5 +1,5 @@
 const orgDB = require('../db/orgDB');
-const { ValidationError } = require('../utils/errors');
+const { ValidationError, ConflictError } = require('../utils/errors');
 
 /**
  * Create a new organization with validation
@@ -13,9 +13,17 @@ async function createOrganization(name) {
     throw new ValidationError('Organization name is required and must be a non-empty string');
   }
 
-  // Create organization in database
-  const org = await orgDB.create(name.trim());
-  return org;
+  try {
+    // Create organization in database
+    const org = await orgDB.create(name.trim());
+    return org;
+  } catch (error) {
+    // Check if it's a unique constraint violation
+    if (error.code === 'UNIQUE_VIOLATION') {
+      throw new ConflictError(error.message);
+    }
+    throw error;
+  }
 }
 
 module.exports = {

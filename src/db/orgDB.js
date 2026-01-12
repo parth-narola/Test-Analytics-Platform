@@ -16,6 +16,12 @@ function create(name) {
 
     db.run(sql, [id, name, createdAt], function(err) {
       if (err) {
+        // Check for unique constraint violation on organization name
+        if (err.message && err.message.includes('UNIQUE constraint failed')) {
+          const error = new Error(`Organization with name "${name}" already exists`);
+          error.code = 'UNIQUE_VIOLATION';
+          return reject(error);
+        }
         return reject(err);
       }
 
