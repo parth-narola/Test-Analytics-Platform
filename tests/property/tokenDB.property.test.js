@@ -63,15 +63,19 @@ describe('Token DB Property Tests', () => {
       fc.asyncProperty(
         fc.string({ minLength: 10, maxLength: 100 }), // Random token string
         async (tokenString) => {
-          // Create two organizations and projects
-          const org1 = await orgDB.create(`Org1-${Date.now()}-${Math.random()}`);
-          const project1 = await projectDB.create(org1.id, `Project1-${Date.now()}-${Math.random()}`);
+          // Create two organizations and projects with unique names to avoid collisions
+          const timestamp = Date.now();
+          const random = Math.random();
           
-          const org2 = await orgDB.create(`Org2-${Date.now()}-${Math.random()}`);
-          const project2 = await projectDB.create(org2.id, `Project2-${Date.now()}-${Math.random()}`);
+          const org1 = await orgDB.create(`Org1-${timestamp}-${random}`);
+          const project1 = await projectDB.create(org1.id, `Project1-${timestamp}-${random}`);
           
-          // Hash the same token
-          const tokenHash = hashToken(tokenString);
+          const org2 = await orgDB.create(`Org2-${timestamp}-${random}`);
+          const project2 = await projectDB.create(org2.id, `Project2-${timestamp}-${random}`);
+          
+          // Hash the same token with a unique suffix to avoid collisions across test runs
+          const uniqueTokenString = `${tokenString}-${timestamp}-${random}`;
+          const tokenHash = hashToken(uniqueTokenString);
           
           // Create token for first project
           await tokenDB.create(project1.id, tokenHash);

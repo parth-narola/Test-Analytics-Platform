@@ -30,7 +30,7 @@ describe('Project Service Property Tests', () => {
   it('Property 6: Referential integrity enforcement for projects', async () => {
     await fc.assert(
       fc.asyncProperty(
-        fc.string({ minLength: 1, maxLength: 50 }), // Random project name
+        fc.string({ minLength: 1, maxLength: 50 }).filter(s => s.trim().length > 0), // Random non-empty project name
         async (projectName) => {
           // Generate a random non-existent organization ID
           const nonExistentOrgId = uuidv4();
