@@ -17,8 +17,14 @@ router.post('/',
       .trim()
       .notEmpty()
       .withMessage('run_id is required')
-      .isUUID()
-      .withMessage('run_id must be a valid UUID'),
+      .custom((value) => {
+        // Validate UUID format after trimming
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        if (!uuidRegex.test(value)) {
+          throw new Error('run_id must be a valid UUID');
+        }
+        return true;
+      }),
     body('status')
       .trim()
       .notEmpty()
@@ -34,7 +40,7 @@ router.post('/',
       .trim()
       .notEmpty()
       .withMessage('timestamp is required')
-      .isISO8601()
+      .isISO8601({ strict: false })
       .withMessage('timestamp must be a valid ISO 8601 date')
   ],
   async (req, res, next) => {

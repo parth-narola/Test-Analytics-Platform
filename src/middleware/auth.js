@@ -24,7 +24,12 @@ async function authenticate(req, res, next) {
     }
     
     // Extract token (remove 'Bearer ' prefix)
-    const token = authHeader.substring(7);
+    const token = authHeader.substring(7).trim();
+    
+    // Check if token is empty
+    if (!token || token === '') {
+      throw new UnauthorizedError('Authentication token required');
+    }
     
     // Hash the token
     const tokenHash = hashToken(token);

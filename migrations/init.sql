@@ -4,7 +4,7 @@
 -- Organizations table (top-level tenant)
 CREATE TABLE IF NOT EXISTS organizations (
   id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
+  name TEXT NOT NULL UNIQUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
