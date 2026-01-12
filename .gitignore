@@ -1,2 +1,13 @@
 node_modules/
 .kiro/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env
+
+# Test files
+test-db.*
