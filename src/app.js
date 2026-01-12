@@ -1,4 +1,5 @@
 const express = require('express');
+const { requestLogger } = require('./middleware/requestLogger');
 const { errorHandler } = require('./middleware/errorHandler');
 const orgRoutes = require('./routes/orgs');
 const projectRoutes = require('./routes/projects');
@@ -14,6 +15,7 @@ function createApp() {
 
   // Middleware
   app.use(express.json());
+  app.use(requestLogger);
 
   // Routes
   app.use('/orgs', orgRoutes);
