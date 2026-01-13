@@ -17,6 +17,12 @@ function create(organizationId, name) {
 
     db.run(sql, [id, organizationId, name, createdAt], function(err) {
       if (err) {
+        // Check for unique constraint violation on project name within organization
+        if (err.message && err.message.includes('UNIQUE constraint failed')) {
+          const error = new Error(`Project with name "${name}" already exists in this organization`);
+          error.code = 'UNIQUE_VIOLATION';
+          return reject(error);
+        }
         // Check for foreign key constraint violation
         if (err.message && err.message.includes('FOREIGN KEY constraint failed')) {
           const error = new Error(`Organization with id ${organizationId} does not exist`);

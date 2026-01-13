@@ -1,6 +1,6 @@
 const projectDB = require('../db/projectDB');
 const orgDB = require('../db/orgDB');
-const { ValidationError, NotFoundError } = require('../utils/errors');
+const { ValidationError, NotFoundError, ConflictError } = require('../utils/errors');
 
 /**
  * Create a new project with validation
@@ -28,8 +28,16 @@ async function createProject(organizationId, name) {
   }
 
   // Create project in database
-  const project = await projectDB.create(organizationId, name.trim());
-  return project;
+  try {
+    const project = await projectDB.create(organizationId, name.trim());
+    return project;
+  } catch (err) {
+    // Handle unique constraint violation
+    if (err.code === 'UNIQUE_VIOLATION') {
+      throw new ConflictError(err.message);
+    }
+    throw err;
+  }
 }
 
 module.exports = {

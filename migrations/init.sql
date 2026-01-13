@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS projects (
   organization_id TEXT NOT NULL,
   name TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (organization_id) REFERENCES organizations(id)
+  FOREIGN KEY (organization_id) REFERENCES organizations(id),
+  UNIQUE(organization_id, name)  -- Ensure project names are unique within each organization
 );
 
 -- API tokens table (scoped to a single project)

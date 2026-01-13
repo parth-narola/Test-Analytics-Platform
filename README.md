@@ -144,6 +144,9 @@ Create a new project within an organization.
 **Error Responses:**
 - `400 Bad Request` - Missing or invalid fields
 - `404 Not Found` - Organization doesn't exist
+- `409 Conflict` - Project with this name already exists in the organization
+
+**Note:** Project names must be unique within each organization, but different organizations can have projects with the same name.
 
 **Example:**
 ```bash
@@ -276,7 +279,11 @@ curl -X POST http://localhost:3000/ingest \
 - Organizations → Projects → API Tokens (hierarchical multi-tenancy)
 - Test Runs linked to Projects (data isolation)
 - Foreign key constraints enforce referential integrity
-- UNIQUE constraints prevent duplicates
+- UNIQUE constraints prevent duplicates:
+  - Organization names are globally unique
+  - Project names are unique within each organization (different orgs can reuse names)
+  - API tokens are globally unique
+  - Test run IDs are unique per project
 
 ### 2. Idempotency Strategy
 
