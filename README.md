@@ -250,7 +250,7 @@ curl -X POST http://localhost:3000/ingest \
     "run_id": "770e8400-e29b-41d4-a716-446655440002",
     "status": "passed",
     "duration_ms": 1234,
-    "timestamp": "2026-01-12T10:10:00Z"
+    "timestamp": "2026-01-13T05:34:49.712Z"
   }'
 ```
 
